@@ -5,4 +5,4 @@
 // Deployed the backend to Render? Put its URL here, e.g.
 //   const BACKEND_URL = "https://my-rps-backend.onrender.com";
 // ============================================================
-const BACKEND_URL = "";
+const BACKEND_URL = "https://rockpaperscissors-064g.onrender.com";

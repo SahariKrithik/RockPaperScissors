@@ -176,14 +176,16 @@
   body.web .playbtn{display:inline-block}
 
   .navs{position:fixed;right:14px;bottom:32px;display:flex;gap:8px;z-index:6;transition:opacity .5s}
-  .navs button{
+  .navs button,.navs a{
     width:44px;height:44px;border-radius:50%;cursor:pointer;
     border:2px solid color-mix(in srgb,var(--paper) 25%,transparent);
     background:rgba(255,255,255,.08);color:var(--paper);
     font-family:"Baloo 2","Comic Sans MS",sans-serif;font-size:1.5rem;font-weight:800;
     display:flex;align-items:center;justify-content:center;padding-bottom:4px;
+    text-decoration:none;
   }
-  .navs button:hover{background:rgba(255,255,255,.2)}
+  .navs a{font-size:1.2rem;padding-bottom:0}
+  .navs button:hover,.navs a:hover{background:rgba(255,255,255,.2)}
   body.idle .navs{opacity:0;pointer-events:none}
 
   .progress{position:fixed;left:0;bottom:0;height:5px;background:var(--sun);width:0;transition:width .4s ease;z-index:5}
@@ -434,11 +436,11 @@
     <div class="cols">
       <div class="os">
         <b>🪟 Windows</b>
-        <p>The magic typing window is PowerShell: click Start, type <code>PowerShell</code>, press Enter. Install Node.js from <code>nodejs.org</code> first, then the magic words are <code>npm install</code> and <code>npm run dev</code>.</p>
+        <p>The magic typing window is PowerShell: click Start, type <code>PowerShell</code>, press Enter. Install Node.js from <code>nodejs.org</code> first, then the magic words are <code>npm install</code> and <code>npm start</code>.</p>
       </div>
       <div class="os">
         <b>🍎 Mac</b>
-        <p>The magic typing window is Terminal: press <code>Cmd + Space</code>, type <code>Terminal</code>, press Enter. Install Node.js from <code>nodejs.org</code> first, then the same magic words: <code>npm install</code> and <code>npm run dev</code>.</p>
+        <p>The magic typing window is Terminal: press <code>Cmd + Space</code>, type <code>Terminal</code>, press Enter. Install Node.js from <code>nodejs.org</code> first, then the same magic words: <code>npm install</code> and <code>npm start</code>.</p>
       </div>
     </div>
   </div>
@@ -477,7 +479,7 @@
     <div class="cols">
       <div class="os">
         <b>🪟 Windows and 🍎 Mac, exactly the same</b>
-        <p>All in the browser. Click "New", choose "Web Service", pick the GitHub repository, then "Create Web Service". Render runs the game's brain day and night.</p>
+        <p>All in the browser. Click "New", choose "Web Service", pick the GitHub repository, then "Create Web Service". Render runs the game's brain day and night. When it finishes, copy the service URL and paste it into <code>frontend/config.js</code> as <code>BACKEND_URL</code>, then push - that tells the game's face where its brain lives.</p>
       </div>
     </div>
   </div>
@@ -515,6 +517,7 @@
 
 <a class="playbtn" href="index.html">🎮 Play the game</a>
 <div class="navs">
+  <a class="home" href="index.html" title="Back to the game" aria-label="Back to the game">🎮</a>
   <button class="prev" aria-label="Previous slide">‹</button>
   <button class="next" aria-label="Next slide">›</button>
 </div>
@@ -552,6 +555,7 @@
     if (e.clientX < innerWidth * 0.2) go(i - 1);
     else go(i + 1);
   });
+  document.querySelector('.navs .home').addEventListener('click', e => e.stopPropagation());
   document.querySelector('.navs .prev').addEventListener('click', e => { e.stopPropagation(); go(i - 1); });
   document.querySelector('.navs .next').addEventListener('click', e => { e.stopPropagation(); go(i + 1); });
 

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rock Paper Scissors - Slides</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='80'>📽️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .deck {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      min-height: 100vh;
+    }
+
+    .deck-top {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      z-index: 10;
+    }
+
+    .deck-top .repo-link {
+      margin-top: 0;
+      background: var(--win);
+      color: #fff;
+      font-size: 1.05rem;
+      padding: 10px 22px;
+      font-weight: 700;
+    }
+
+    .slide {
+      display: none;
+      background: var(--panel);
+      border: 3px solid var(--ink);
+      border-radius: 24px;
+      box-shadow: 6px 6px 0 var(--ink);
+      padding: 40px 32px;
+      width: 100%;
+      min-height: 380px;
+      text-align: center;
+      flex-direction: column;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .slide.active {
+      display: flex;
+      animation: pop 0.3s ease-out;
+    }
+
+    .slide h1 {
+      font-size: clamp(1.8rem, 6vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .slide h2 {
+      font-size: clamp(1.4rem, 5vw, 1.9rem);
+      font-weight: 700;
+    }
+
+    .slide p {
+      font-size: 1.15rem;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .slide .big-emoji {
+      font-size: clamp(3rem, 10vw, 4.5rem);
+      line-height: 1.2;
+    }
+
+    .slide ul {
+      list-style: none;
+      text-align: left;
+      max-width: 400px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .slide li {
+      font-size: 1.1rem;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .play-cta {
+      display: inline-block;
+      background: var(--win);
+      color: #fff;
+      font-size: 1.3rem;
+      font-weight: 700;
+      padding: 14px 34px;
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      box-shadow: 4px 4px 0 var(--ink);
+      text-decoration: none;
+      margin: 0 auto;
+    }
+
+    .play-cta:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--ink);
+    }
+
+    .deck-nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .deck-nav button {
+      font-family: inherit;
+      font-size: 1.5rem;
+      font-weight: 700;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 3px solid var(--ink);
+      background: var(--panel);
+      color: var(--ink);
+      cursor: pointer;
+      box-shadow: 3px 3px 0 var(--ink);
+      line-height: 1;
+    }
+
+    .deck-nav button:active:not(:disabled) {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 var(--ink);
+    }
+
+    .deck-nav button:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+
+    .deck-nav button:focus-visible {
+      outline: 3px dashed var(--ink);
+      outline-offset: 3px;
+    }
+
+    #slide-counter {
+      font-size: 1.1rem;
+      font-weight: 600;
+      min-width: 4ch;
+      text-align: center;
+    }
+
+    .slide-finale {
+      background: var(--ink);
+      color: var(--panel);
+    }
+
+    .slide-finale h2 {
+      font-size: clamp(1.8rem, 6vw, 2.4rem);
+    }
+
+    .slide-finale .closing {
+      font-size: clamp(1.5rem, 5.5vw, 2.1rem);
+      font-weight: 700;
+      color: var(--sun);
+    }
+
+    .pipeline {
+      border: 2px solid var(--sun);
+      border-radius: 999px;
+      padding: 10px 20px;
+      font-weight: 600;
+      font-size: 1rem;
+      margin: 0 auto;
+    }
+
+    .code-pill {
+      border: 2px dashed var(--sun);
+      border-radius: 999px;
+      padding: 10px 20px;
+      font-weight: 600;
+      font-size: 1rem;
+      margin: 0 auto;
+    }
+
+    .slide a {
+      color: var(--paper);
+      font-weight: 600;
+    }
+
+    .slide.slide-finale a,
+    .code-pill a {
+      color: var(--sun);
+    }
+
+    .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .link-row a {
+      border: 2px solid var(--sun);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 0.95rem;
+      color: var(--sun);
+      text-decoration: none;
+    }
+
+    .link-row a:hover {
+      background: rgba(255, 213, 61, 0.15);
+    }
+
+    .video-frame {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 3px solid var(--ink);
+      border-radius: 16px;
+      background: var(--ink);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .slide.active { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck">
+    <div class="deck-top">
+      <a class="repo-link" href="index.html">🎮 Play the game</a>
+    </div>
+
+    <section class="slide active">
+      <p class="big-emoji">✊ ✋ ✌️</p>
+      <h1>
+        <span class="title-rock">Rock</span>
+        <span class="title-paper">Paper</span>
+        <span class="title-scissors">Scissors</span>
+      </h1>
+      <p>A tiny game with a big streak obsession.</p>
+    </section>
+
+    <section class="slide">
+      <h2>How to play</h2>
+      <ul>
+        <li>✊ Pick a move - the computer picks one too.</li>
+        <li>🔥 Every win grows your streak.</li>
+        <li>💥 One loss and the streak is over.</li>
+        <li>🤝 Draws are safe - your streak survives.</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>The leaderboard</h2>
+      <p class="big-emoji">🏆</p>
+      <p>When your streak ends, put your name on it. Only the 10 longest streaks ever make the board - how long can you last?</p>
+    </section>
+
+    <section class="slide">
+      <h2>Under the hood</h2>
+      <ul>
+        <li>🎨 A website with no framework - just HTML, CSS and JavaScript, hosted on <a href="https://vercel.com" target="_blank" rel="noopener">Vercel</a>.</li>
+        <li>🤖 A small Node.js server on <a href="https://render.com" target="_blank" rel="noopener">Render</a> picks the computer's move and decides every winner, so the browser can't cheat.</li>
+        <li>🗄️ <a href="https://www.mongodb.com/atlas" target="_blank" rel="noopener">MongoDB Atlas</a> remembers the leaderboard forever.</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>See it in action</h2>
+      <iframe class="video-frame" src="https://drive.google.com/file/d/1IDi9MEwFYa0UuznRcmWqcOToEC8fZWfj/preview" allow="autoplay; fullscreen" allowfullscreen title="Gameplay demo video"></iframe>
+      <p>
+        <a href="https://drive.google.com/file/d/19Kw5mVB5X0gkZ-jz5JzFhZNU5-QUCqmu/preview" target="_blank" rel="noopener">🛠️ Watch the full build video</a>
+      </p>
+    </section>
+
+    <section class="slide">
+      <h2>Your move</h2>
+      <p class="big-emoji">🎲</p>
+      <a class="play-cta" href="index.html">🎮 Play now</a>
+      <p><a href="https://github.com/SahariKrithik/RockPaperScissors" target="_blank" rel="noopener">🐙 See how this game is made</a></p>
+      <p><a href="https://drive.google.com/drive/folders/1wf9BZ4ZSn-C0XGQSXwn2rjqnyNRhp3mA?usp=sharing" target="_blank" rel="noopener">🎬 Watch the demo video</a></p>
+    </section>
+
+    <section class="slide slide-finale">
+      <p class="big-emoji">🎉</p>
+      <h2>You did it!</h2>
+      <p>Your game went from a tiny idea to the whole wide internet.</p>
+      <p class="pipeline">Idea → Code → Repository → localhost → Deploy → The world!</p>
+      <p class="code-pill">🔗 See the code: <a href="https://github.com/SahariKrithik/RockPaperScissors" target="_blank" rel="noopener">github.com/SahariKrithik/RockPaperScissors</a></p>
+      <p class="closing">What will YOU build next?</p>
+      <div class="link-row">
+        <a href="index.html">🎮 Our game</a>
+        <a href="https://github.com/SahariKrithik/RockPaperScissors" target="_blank" rel="noopener">🐙 GitHub</a>
+        <a href="https://vercel.com" target="_blank" rel="noopener">▲ Vercel</a>
+        <a href="https://render.com" target="_blank" rel="noopener">☁️ Render</a>
+        <a href="https://www.mongodb.com/atlas" target="_blank" rel="noopener">🍃 MongoDB</a>
+      </div>
+    </section>
+
+    <footer class="deck-nav">
+      <button id="prev-btn" aria-label="Previous slide">‹</button>
+      <span id="slide-counter">1 / 7</span>
+      <button id="next-btn" aria-label="Next slide">›</button>
+    </footer>
+  </main>
+
+  <script>
+    const slides = document.querySelectorAll(".slide");
+    const prevBtn = document.getElementById("prev-btn");
+    const nextBtn = document.getElementById("next-btn");
+    const counter = document.getElementById("slide-counter");
+    let current = 0;
+
+    function show(index) {
+      current = Math.max(0, Math.min(slides.length - 1, index));
+      slides.forEach((slide, i) => slide.classList.toggle("active", i === current));
+      counter.textContent = (current + 1) + " / " + slides.length;
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === slides.length - 1;
+    }
+
+    prevBtn.addEventListener("click", () => show(current - 1));
+    nextBtn.addEventListener("click", () => show(current + 1));
+    document.addEventListener("keydown", e => {
+      if (e.key === "ArrowLeft") show(current - 1);
+      if (e.key === "ArrowRight") show(current + 1);
+    });
+
+    show(0);
+  </script>
+</body>
+</html>

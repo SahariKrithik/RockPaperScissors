@@ -343,3 +343,33 @@ body {
     animation: none;
   }
 }
+
+.page-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.page-links .repo-link {
+  margin-top: 0;
+}
+
+.repo-link {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 8px 18px;
+  background: var(--panel);
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 var(--ink);
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.repo-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 3px 5px 0 var(--ink);
+}

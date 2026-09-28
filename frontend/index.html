@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rock Paper Scissors</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='80'>✌️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page">
+    <h1 class="title">
+      <span class="title-rock">Rock</span>
+      <span class="title-paper">Paper</span>
+      <span class="title-scissors">Scissors</span>
+    </h1>
+
+    <div class="streak-bar">
+      <span class="streak-flame">🔥</span>
+      <span>Streak</span>
+      <span class="streak-count" id="streak">0</span>
+    </div>
+
+    <section class="arena">
+      <div class="player-side">
+        <p class="side-label">You</p>
+        <div class="hand" id="player-hand">❔</div>
+      </div>
+      <div class="vs">VS</div>
+      <div class="player-side">
+        <p class="side-label">Computer</p>
+        <div class="hand" id="computer-hand">❔</div>
+      </div>
+    </section>
+
+    <p class="result" id="result">Pick your move!</p>
+
+    <section class="moves">
+      <button class="move-btn move-rock" data-move="rock" aria-label="Play rock">✊</button>
+      <button class="move-btn move-paper" data-move="paper" aria-label="Play paper">✋</button>
+      <button class="move-btn move-scissors" data-move="scissors" aria-label="Play scissors">✌️</button>
+    </section>
+
+    <section class="leaderboard">
+      <h2>🏆 Longest streaks ever</h2>
+      <ol id="leaderboard-list">
+        <li class="empty">Loading...</li>
+      </ol>
+    </section>
+  </main>
+
+  <div class="modal-overlay hidden" id="modal">
+    <div class="modal">
+      <p class="modal-emoji">💥</p>
+      <h2 id="modal-title">Streak over!</h2>
+      <p id="modal-text">You won 0 in a row. Add it to the leaderboard!</p>
+      <form id="name-form">
+        <input type="text" id="name-input" maxlength="20" placeholder="Your name" autocomplete="off" required>
+        <div class="modal-buttons">
+          <button type="submit" class="btn-save">Save my streak</button>
+          <button type="button" class="btn-skip" id="skip-btn">Skip</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

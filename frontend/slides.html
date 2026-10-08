@@ -228,8 +228,6 @@
     body.rec #slide-counter { display: none; }
     body.rec .deck { justify-content: center; }
     body.rec { --rs: 1.4; }
-    @media (min-width: 1700px) { body.rec { --rs: 1.6; } }
-    @media (min-width: 2200px) { body.rec { --rs: 2; } }
     body.rec .slide.active {
       transform: scale(var(--rs));
       animation: popRec 0.3s ease-out;
@@ -287,33 +285,7 @@
       </ul>
     </section>
 
-    <section class="slide">
-      <h2>See it in action</h2>
-      <p class="big-emoji">🎬</p>
-      <a class="play-cta" href="https://drive.google.com/file/d/1IDi9MEwFYa0UuznRcmWqcOToEC8fZWfj/view" target="_blank" rel="noopener">🎮 Watch the game in action</a>
-      <a class="play-cta" href="https://drive.google.com/file/d/19Kw5mVB5X0gkZ-jz5JzFhZNU5-QUCqmu/view" target="_blank" rel="noopener">🛠️ Watch Claude build it</a>
-    </section>
-
-    <section class="slide">
-      <h2>Your move</h2>
-      <p class="big-emoji">🎲</p>
-      <a class="play-cta" href="index.html">🎮 Play now</a>
-      <p><a href="https://drive.google.com/drive/folders/1wf9BZ4ZSn-C0XGQSXwn2rjqnyNRhp3mA?usp=sharing" target="_blank" rel="noopener">🎬 Watch the demo video</a></p>
-    </section>
-
-    <section class="slide slide-finale">
-      <p class="big-emoji">🎉</p>
-      <h2>You did it!</h2>
-      <p>Your game went from a tiny idea to the whole wide internet.</p>
-      <p class="pipeline">Idea → Code → Repository → localhost → Deploy → The world!</p>
-      <div class="link-row">
-        <a href="index.html">🎮 Our game</a>
-        <a href="https://render.com" target="_blank" rel="noopener">☁️ Render</a>
-        <a href="https://www.mongodb.com/atlas" target="_blank" rel="noopener">🍃 MongoDB</a>
-      </div>
-    </section>
-
-    <footer class="deck-nav">
+        <footer class="deck-nav">
       <button id="prev-btn" aria-label="Previous slide">‹</button>
       <span id="slide-counter">1 / 7</span>
       <button id="next-btn" aria-label="Next slide">›</button>
@@ -333,10 +305,19 @@
       counter.textContent = (current + 1) + " / " + slides.length;
       prevBtn.disabled = current === 0;
       nextBtn.disabled = current === slides.length - 1;
+      fitRec();
     }
 
+    function fitRec() {
+      if (!document.body.classList.contains("rec")) return;
+      const card = slides[current];
+      const s = Math.min(0.82 * innerWidth / card.offsetWidth, 0.86 * innerHeight / card.offsetHeight);
+      document.body.style.setProperty("--rs", Math.max(1, Math.min(s, 3)).toFixed(3));
+    }
+    window.addEventListener("resize", fitRec);
+
     // Autoplay: press A to start/stop. Seconds per slide, slide 1 first.
-    const SLIDE_SECONDS = [5, 8, 6, 12, 5, 5, 6];
+    const SLIDE_SECONDS = [5, 8, 6, 12];
     let auto = false, autoTimer = null;
 
     function stopAuto() { auto = false; clearTimeout(autoTimer); }
@@ -363,6 +344,7 @@
     const fsMedia = matchMedia("(display-mode: fullscreen)");
     function syncRec() {
       document.body.classList.toggle("rec", !!document.fullscreenElement || fsMedia.matches);
+      fitRec();
     }
     document.addEventListener("fullscreenchange", syncRec);
     fsMedia.addEventListener("change", syncRec);

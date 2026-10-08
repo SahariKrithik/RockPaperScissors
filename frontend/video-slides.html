@@ -101,6 +101,7 @@
     background:rgba(255,255,255,.08);border-radius:20px;padding:1.1rem .8rem;
     display:flex;flex-direction:column;align-items:center;gap:.35rem;
   }
+  .grid.four .card{flex:0 1 clamp(140px,20vw,205px)}
   .card span{font-size:2.2rem}
   .card b{font-family:"Baloo 2","Comic Sans MS",sans-serif;font-size:1.25rem;color:var(--c)}
   .card p{font-size:.95rem;font-weight:700;color:color-mix(in srgb,var(--paper) 70%,transparent)}
@@ -381,6 +382,30 @@
   </div>
 </section>
 
+<section class="slide" style="--a:var(--coral)">
+  <h2 class="pop" style="--i:0">Which Claude should you pick?</h2>
+  <p class="tag pop" style="--i:1">Claude comes in sizes, like bikes</p>
+  <div class="grid four">
+    <div class="card pop" style="--i:2;--c:var(--mint)"><span>🐇</span><b>Haiku</b><p>Small and speedy. Quick questions.</p></div>
+    <div class="card pop" style="--i:3;--c:var(--sky)"><span>🦊</span><b>Sonnet</b><p>The everyday one. Smart AND fast.</p></div>
+    <div class="card pop" style="--i:4;--c:var(--lilac)"><span>🦉</span><b>Opus</b><p>The big thinker for hard problems.</p></div>
+    <div class="card pop" style="--i:5;--c:var(--sun)"><span>🐉</span><b>Fable</b><p>The newest, biggest brain of all.</p></div>
+  </div>
+  <p class="term pop" style="--i:6">🧑‍💻 Coders say: each size is a <b>model</b>. Picking one is choosing a model.</p>
+  <div class="chips">
+    <span class="chip pop" style="--i:7">Start with Sonnet. Stuck? Call Opus. Tiny question? Haiku is plenty.</span>
+  </div>
+  <div class="cap same pop" style="--i:8">
+    <h3>For your grown-up helper</h3>
+    <div class="cols">
+      <div class="os">
+        <b>🪟 Windows and 🍎 Mac, exactly the same</b>
+        <p>In Claude Code, type <code>/model</code> to switch (this video was made with Fable). On <code>claude.ai</code>, use the model menu at the top. Claude reads and writes in tiny word-pieces called <code>tokens</code>, and bigger models cost more per token, so save Opus and Fable for the hard parts.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="slide step" style="--a:var(--coral)">
   <div class="steprow pop" style="--i:0">
     <span class="badge">1</span><span class="chipmoji">🤖</span>
@@ -521,14 +546,14 @@
   <button class="next" aria-label="Next slide">›</button>
 </div>
 <div class="progress"></div>
-<div class="count">1 / 19</div>
+<div class="count">1 / 20</div>
 
 <script>
   if (location.protocol !== 'file:') document.body.classList.add('web');
 
   // Autoplay: press A to start/stop. Seconds per slide, slide 1 first.
   const SLIDE_SECONDS = [20, 20, 25, 25, 25, 20, 20, 20, 20, 15,
-                         10, 30, 25, 25, 30, 25, 20, 25, 25];
+                         10, 30, 25, 25, 25, 30, 25, 20, 25, 25];
 
   const slides = [...document.querySelectorAll('.slide')];
   const bar = document.querySelector('.progress');

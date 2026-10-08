@@ -227,9 +227,19 @@
     body.rec #next-btn,
     body.rec #slide-counter { display: none; }
     body.rec .deck { justify-content: center; }
+    body.rec .slide.active {
+      transform: scale(1.4);
+      animation: popRec 0.3s ease-out;
+    }
+
+    @keyframes popRec {
+      0% { transform: scale(0.42); }
+      70% { transform: scale(1.6); }
+      100% { transform: scale(1.4); }
+    }
 
     @media (prefers-reduced-motion: reduce) {
-      .slide.active { animation: none; }
+      .slide.active, body.rec .slide.active { animation: none; }
     }
   </style>
 </head>

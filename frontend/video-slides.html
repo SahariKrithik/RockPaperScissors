@@ -527,6 +527,10 @@
 <script>
   if (location.protocol !== 'file:') document.body.classList.add('web');
 
+  // Autoplay: press A to start/stop. Seconds per slide, slide 1 first.
+  const SLIDE_SECONDS = [20, 20, 25, 25, 25, 20, 20, 20, 20, 15,
+                         10, 30, 25, 25, 30, 25, 20, 25, 25];
+
   const slides = [...document.querySelectorAll('.slide')];
   const bar = document.querySelector('.progress');
   const count = document.querySelector('.count');
@@ -542,22 +546,36 @@
     count.textContent = (i + 1) + ' / ' + slides.length;
   }
 
+  let auto = false, autoTimer = null;
+  function stopAuto(){ auto = false; clearTimeout(autoTimer); }
+  function scheduleAuto(){
+    clearTimeout(autoTimer);
+    if (!auto) return;
+    if (i >= slides.length - 1) { auto = false; return; }
+    autoTimer = setTimeout(() => { go(i + 1); scheduleAuto(); }, (SLIDE_SECONDS[i] || 20) * 1000);
+  }
+
   addEventListener('keydown', e => {
-    if (['ArrowRight','ArrowDown','PageDown',' ','Enter'].includes(e.key)) { e.preventDefault(); go(i + 1); }
-    else if (['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(e.key)) { e.preventDefault(); go(i - 1); }
-    else if (e.key === 'Home') go(0);
-    else if (e.key === 'End') go(slides.length - 1);
+    if (['ArrowRight','ArrowDown','PageDown',' ','Enter'].includes(e.key)) { e.preventDefault(); stopAuto(); go(i + 1); }
+    else if (['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(e.key)) { e.preventDefault(); stopAuto(); go(i - 1); }
+    else if (e.key === 'Home') { stopAuto(); go(0); }
+    else if (e.key === 'End') { stopAuto(); go(slides.length - 1); }
+    else if (e.key.toLowerCase() === 'a') {
+      if (auto) stopAuto();
+      else { auto = true; scheduleAuto(); }
+    }
     else if (e.key.toLowerCase() === 'f') {
       document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
     }
   });
   addEventListener('click', e => {
+    stopAuto();
     if (e.clientX < innerWidth * 0.2) go(i - 1);
     else go(i + 1);
   });
   document.querySelector('.navs .home').addEventListener('click', e => e.stopPropagation());
-  document.querySelector('.navs .prev').addEventListener('click', e => { e.stopPropagation(); go(i - 1); });
-  document.querySelector('.navs .next').addEventListener('click', e => { e.stopPropagation(); go(i + 1); });
+  document.querySelector('.navs .prev').addEventListener('click', e => { e.stopPropagation(); stopAuto(); go(i - 1); });
+  document.querySelector('.navs .next').addEventListener('click', e => { e.stopPropagation(); stopAuto(); go(i + 1); });
 
   let tx = 0, ty = 0;
   addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, {passive:true});
@@ -565,6 +583,7 @@
     const dx = e.changedTouches[0].clientX - tx;
     const dy = e.changedTouches[0].clientY - ty;
     if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      stopAuto();
       if (dx < 0) go(i + 1); else go(i - 1);
     }
   }, {passive:true});

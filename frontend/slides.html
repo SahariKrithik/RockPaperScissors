@@ -190,7 +190,7 @@
       margin: 0 auto;
     }
 
-    .slide a {
+    .slide a:not(.play-cta) {
       color: var(--paper);
       font-weight: 600;
     }
@@ -219,14 +219,6 @@
 
     .link-row a:hover {
       background: rgba(255, 213, 61, 0.15);
-    }
-
-    .video-frame {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      border: 3px solid var(--ink);
-      border-radius: 16px;
-      background: var(--ink);
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -269,7 +261,7 @@
     <section class="slide">
       <h2>Under the hood</h2>
       <ul>
-        <li>🎨 A website with no framework - just HTML, CSS and JavaScript, hosted on <a href="https://vercel.com" target="_blank" rel="noopener">Vercel</a>.</li>
+        <li>🎨 A website with no framework - just HTML, CSS and JavaScript.</li>
         <li>🤖 A small Node.js server on <a href="https://render.com" target="_blank" rel="noopener">Render</a> picks the computer's move and decides every winner, so the browser can't cheat.</li>
         <li>🗄️ <a href="https://www.mongodb.com/atlas" target="_blank" rel="noopener">MongoDB Atlas</a> remembers the leaderboard forever.</li>
       </ul>
@@ -277,10 +269,9 @@
 
     <section class="slide">
       <h2>See it in action</h2>
-      <iframe class="video-frame" src="https://drive.google.com/file/d/1IDi9MEwFYa0UuznRcmWqcOToEC8fZWfj/preview" allow="autoplay; fullscreen" allowfullscreen title="Gameplay demo video"></iframe>
-      <p>
-        <a href="https://drive.google.com/file/d/19Kw5mVB5X0gkZ-jz5JzFhZNU5-QUCqmu/preview" target="_blank" rel="noopener">🛠️ Watch the full build video</a>
-      </p>
+      <p class="big-emoji">🎬</p>
+      <a class="play-cta" href="https://drive.google.com/file/d/1IDi9MEwFYa0UuznRcmWqcOToEC8fZWfj/view" target="_blank" rel="noopener">🎮 Watch the game in action</a>
+      <a class="play-cta" href="https://drive.google.com/file/d/19Kw5mVB5X0gkZ-jz5JzFhZNU5-QUCqmu/view" target="_blank" rel="noopener">🛠️ Watch Claude build it</a>
     </section>
 
     <section class="slide">
@@ -295,10 +286,8 @@
       <h2>You did it!</h2>
       <p>Your game went from a tiny idea to the whole wide internet.</p>
       <p class="pipeline">Idea → Code → Repository → localhost → Deploy → The world!</p>
-      <p class="closing">What will YOU build next?</p>
       <div class="link-row">
         <a href="index.html">🎮 Our game</a>
-        <a href="https://vercel.com" target="_blank" rel="noopener">▲ Vercel</a>
         <a href="https://render.com" target="_blank" rel="noopener">☁️ Render</a>
         <a href="https://www.mongodb.com/atlas" target="_blank" rel="noopener">🍃 MongoDB</a>
       </div>

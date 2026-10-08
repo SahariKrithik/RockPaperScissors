@@ -333,7 +333,7 @@
     }
 
     // Autoplay: press A to start/stop. Seconds per slide, slide 1 first.
-    const SLIDE_SECONDS = [8, 14, 10, 16, 8, 8, 10];
+    const SLIDE_SECONDS = [5, 8, 6, 8, 5, 5, 6];
     let auto = false, autoTimer = null;
 
     function stopAuto() { auto = false; clearTimeout(autoTimer); }
@@ -357,9 +357,13 @@
         document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
       }
     });
-    document.addEventListener("fullscreenchange", () => {
-      document.body.classList.toggle("rec", !!document.fullscreenElement);
-    });
+    const fsMedia = matchMedia("(display-mode: fullscreen)");
+    function syncRec() {
+      document.body.classList.toggle("rec", !!document.fullscreenElement || fsMedia.matches);
+    }
+    document.addEventListener("fullscreenchange", syncRec);
+    fsMedia.addEventListener("change", syncRec);
+    syncRec();
 
     show(0);
   </script>

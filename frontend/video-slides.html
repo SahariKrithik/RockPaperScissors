@@ -196,6 +196,8 @@
   }
   body.idle .count{opacity:0}
   body.idle{cursor:none}
+  body.rec{cursor:none}
+  body.rec .playbtn,body.rec .navs,body.rec .count{display:none !important}
 
   @media (max-width:700px){
     .card{flex:1 1 40%}
@@ -208,7 +210,10 @@
     .cap{padding:.85rem 1rem 1rem}
   }
   @media (max-height:800px){
-    .shot{width:min(70vw,540px)}
+    .shot{width:min(70vw,400px)}
+    .cap{padding:.75rem 1.1rem .9rem}
+    .cap h3{padding-bottom:.3rem}
+    .os p{font-size:.9rem;line-height:1.35}
   }
   @media (max-width:700px),(max-height:560px){
     .slide{justify-content:flex-start}
@@ -422,7 +427,7 @@
       <div class="os">
         <b>🪟 Windows and 🍎 Mac, three little steps</b>
         <p>1. Install VS Code from <code>code.visualstudio.com</code>. Windows: run the installer and click Next until it is done. Mac: unzip it and drag it into Applications.</p>
-        <p>2. Make an empty folder for your game. In VS Code click <code>File</code> then <code>Open Folder</code> and pick it. That folder is now your workbench.</p>
+        <p>2. Get the code onto your computer. Coders call this <code>cloning</code>: making your own copy of a repository. In VS Code press <code>Ctrl+Shift+P</code> (Mac: <code>Cmd+Shift+P</code>), type <code>Git: Clone</code>, paste the repository's link from GitHub (the green Code button), choose where to save it, and click Open. Needs Git: Windows gets it from <code>git-scm.com</code>, Mac has it built in. Starting from scratch instead? <code>File</code> then <code>Open Folder</code> on an empty folder.</p>
         <p>3. Click the Extensions icon (four little squares, or <code>Ctrl+Shift+X</code> on Windows, <code>Cmd+Shift+X</code> on Mac), search "Claude Code", click Install, and sign in with a grown-up's account. No VS Code? <code>claude.ai</code> in your browser works too.</p>
       </div>
     </div>
@@ -556,9 +561,15 @@
 <script>
   if (location.protocol !== 'file:') document.body.classList.add('web');
 
+  const fsMedia = matchMedia('(display-mode: fullscreen)');
+  function syncRec(){ document.body.classList.toggle('rec', !!document.fullscreenElement || fsMedia.matches); }
+  addEventListener('fullscreenchange', syncRec);
+  fsMedia.addEventListener('change', syncRec);
+  syncRec();
+
   // Autoplay: press A to start/stop. Seconds per slide, slide 1 first.
-  const SLIDE_SECONDS = [20, 20, 25, 25, 25, 20, 20, 20, 20, 15,
-                         10, 30, 25, 25, 25, 30, 25, 20, 25, 25];
+  const SLIDE_SECONDS = [5, 8, 7, 7, 7, 7, 7, 7, 7, 8,
+                         5, 8, 8, 8, 8, 8, 8, 8, 8, 5];
 
   const slides = [...document.querySelectorAll('.slide')];
   const bar = document.querySelector('.progress');

@@ -221,6 +221,13 @@
       background: rgba(255, 213, 61, 0.15);
     }
 
+    body.rec { cursor: none; }
+    body.rec .deck-top,
+    body.rec #prev-btn,
+    body.rec #next-btn,
+    body.rec #slide-counter { display: none; }
+    body.rec .deck { justify-content: center; }
+
     @media (prefers-reduced-motion: reduce) {
       .slide.active { animation: none; }
     }
@@ -315,11 +322,33 @@
       nextBtn.disabled = current === slides.length - 1;
     }
 
-    prevBtn.addEventListener("click", () => show(current - 1));
-    nextBtn.addEventListener("click", () => show(current + 1));
+    // Autoplay: press A to start/stop. Seconds per slide, slide 1 first.
+    const SLIDE_SECONDS = [8, 14, 10, 16, 8, 8, 10];
+    let auto = false, autoTimer = null;
+
+    function stopAuto() { auto = false; clearTimeout(autoTimer); }
+    function scheduleAuto() {
+      clearTimeout(autoTimer);
+      if (!auto) return;
+      if (current >= slides.length - 1) { auto = false; return; }
+      autoTimer = setTimeout(() => { show(current + 1); scheduleAuto(); }, (SLIDE_SECONDS[current] || 10) * 1000);
+    }
+
+    prevBtn.addEventListener("click", () => { stopAuto(); show(current - 1); });
+    nextBtn.addEventListener("click", () => { stopAuto(); show(current + 1); });
     document.addEventListener("keydown", e => {
-      if (e.key === "ArrowLeft") show(current - 1);
-      if (e.key === "ArrowRight") show(current + 1);
+      if (e.key === "ArrowLeft") { stopAuto(); show(current - 1); }
+      if (e.key === "ArrowRight") { stopAuto(); show(current + 1); }
+      if (e.key.toLowerCase() === "a") {
+        if (auto) stopAuto();
+        else { auto = true; scheduleAuto(); }
+      }
+      if (e.key.toLowerCase() === "f") {
+        document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+      }
+    });
+    document.addEventListener("fullscreenchange", () => {
+      document.body.classList.toggle("rec", !!document.fullscreenElement);
     });
 
     show(0);

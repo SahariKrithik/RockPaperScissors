@@ -359,10 +359,13 @@
     });
     const fsMedia = matchMedia("(display-mode: fullscreen)");
     function syncRec() {
-      document.body.classList.toggle("rec", !!document.fullscreenElement || fsMedia.matches);
+      const rec = !!document.fullscreenElement || fsMedia.matches;
+      document.body.classList.toggle("rec", rec);
+      if (rec && !auto) { auto = true; scheduleAuto(); }
     }
     document.addEventListener("fullscreenchange", syncRec);
     fsMedia.addEventListener("change", syncRec);
+    if (new URLSearchParams(location.search).has("auto")) { auto = true; scheduleAuto(); }
     syncRec();
 
     show(0);

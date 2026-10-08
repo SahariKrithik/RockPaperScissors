@@ -227,15 +227,18 @@
     body.rec #next-btn,
     body.rec #slide-counter { display: none; }
     body.rec .deck { justify-content: center; }
+    body.rec { --rs: 1.4; }
+    @media (min-width: 1700px) { body.rec { --rs: 1.6; } }
+    @media (min-width: 2200px) { body.rec { --rs: 2; } }
     body.rec .slide.active {
-      transform: scale(1.4);
+      transform: scale(var(--rs));
       animation: popRec 0.3s ease-out;
     }
 
     @keyframes popRec {
-      0% { transform: scale(0.42); }
-      70% { transform: scale(1.6); }
-      100% { transform: scale(1.4); }
+      0% { transform: scale(calc(var(--rs) * 0.3)); }
+      70% { transform: scale(calc(var(--rs) * 1.14)); }
+      100% { transform: scale(var(--rs)); }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -359,13 +362,10 @@
     });
     const fsMedia = matchMedia("(display-mode: fullscreen)");
     function syncRec() {
-      const rec = !!document.fullscreenElement || fsMedia.matches;
-      document.body.classList.toggle("rec", rec);
-      if (rec && !auto) { auto = true; scheduleAuto(); }
+      document.body.classList.toggle("rec", !!document.fullscreenElement || fsMedia.matches);
     }
     document.addEventListener("fullscreenchange", syncRec);
     fsMedia.addEventListener("change", syncRec);
-    if (new URLSearchParams(location.search).has("auto")) { auto = true; scheduleAuto(); }
     syncRec();
 
     show(0);

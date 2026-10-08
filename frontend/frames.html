@@ -89,52 +89,56 @@
       box-shadow: 8px 8px 0 var(--ink);
     }
 
-    .curtain {
+    .loader {
       position: fixed;
       inset: 0;
       z-index: 50;
-      background-color: var(--sun);
-      background-image: radial-gradient(rgba(255, 255, 255, 0.35) 3px, transparent 3px);
-      background-size: 34px 34px;
-      transform: translateX(-102%);
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
-      gap: 4vw;
+      gap: clamp(18px, 2.4vw, 44px);
       pointer-events: none;
     }
 
-    .curtain span {
-      font-size: clamp(90px, 16vw, 280px);
-      opacity: 0;
-      transform: scale(0.3);
+    body.playing .loader {
+      display: flex;
+      animation: loaderIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+                 loaderOut 0.3s ease-in 1.7s forwards;
     }
 
-    body.playing .curtain {
-      animation: curtainIn 0.55s cubic-bezier(0.7, 0, 0.3, 1) forwards,
-                 curtainOut 0.6s cubic-bezier(0.7, 0, 0.3, 1) 1.9s forwards;
+    .loader .ball {
+      width: clamp(72px, 7.5vw, 140px);
+      height: clamp(72px, 7.5vw, 140px);
+      border-radius: 50%;
+      border: 4px solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(36px, 3.8vw, 72px);
     }
 
-    body.playing .curtain span {
-      animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-    }
-    body.playing .curtain span:nth-child(1) { animation-delay: 0.55s; }
-    body.playing .curtain span:nth-child(2) { animation-delay: 0.8s; }
-    body.playing .curtain span:nth-child(3) { animation-delay: 1.05s; }
+    .loader .ball:nth-child(1) { background: var(--rock); }
+    .loader .ball:nth-child(2) { background: var(--paper); }
+    .loader .ball:nth-child(3) { background: var(--scissors); }
 
-    @keyframes curtainIn {
-      from { transform: translateX(-102%); }
-      to { transform: translateX(0); }
-    }
+    body.playing .loader .ball { animation: bounce 0.55s ease-in-out 3; }
+    body.playing .loader .ball:nth-child(2) { animation-delay: 0.14s; }
+    body.playing .loader .ball:nth-child(3) { animation-delay: 0.28s; }
 
-    @keyframes curtainOut {
-      from { transform: translateX(0); }
-      to { transform: translateX(102%); }
+    @keyframes loaderIn {
+      from { opacity: 0; transform: scale(0.3); }
+      to { opacity: 1; transform: scale(1); }
     }
 
-    @keyframes popIn {
-      from { opacity: 0; transform: scale(0.3) rotate(-12deg); }
-      to { opacity: 1; transform: scale(1) rotate(0deg); }
+    @keyframes loaderOut {
+      from { opacity: 1; transform: scale(1); }
+      to { opacity: 0; transform: scale(0.6); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-45%); }
     }
 
     .bar {
@@ -203,7 +207,7 @@
     body.rec .bar, body.rec .hint, body.playing .bar, body.playing .hint { display: none; }
 
     @media (prefers-reduced-motion: reduce) {
-      .frame.active, body.playing .curtain, body.playing .curtain span { animation: none; }
+      .frame.active, body.playing .loader, body.playing .loader .ball { animation: none; }
     }
   </style>
 </head>
@@ -232,7 +236,7 @@
     <section class="frame blank dark" aria-label="Blank dark backdrop"></section>
   </div>
 
-  <div class="curtain" aria-hidden="true"><span>✊</span><span>✋</span><span>✌️</span></div>
+  <div class="loader" aria-hidden="true"><span class="ball">✊</span><span class="ball">✋</span><span class="ball">✌️</span></div>
 
   <div class="bar">
     <button data-frame="0">1 · Prompt</button>
@@ -246,7 +250,7 @@
 
   <script>
     const frames = document.querySelectorAll(".frame");
-    const curtain = document.querySelector(".curtain");
+    const loader = document.querySelector(".loader");
     let current = 0;
 
     function show(index) {
@@ -259,8 +263,8 @@
       if (document.body.classList.contains("playing")) return;
       document.body.classList.add("playing");
     }
-    curtain.addEventListener("animationend", e => {
-      if (e.animationName === "curtainOut") document.body.classList.remove("playing");
+    loader.addEventListener("animationend", e => {
+      if (e.animationName === "loaderOut") document.body.classList.remove("playing");
     });
 
     document.querySelectorAll("[data-frame]").forEach(btn => btn.addEventListener("click", () => show(Number(btn.dataset.frame))));
